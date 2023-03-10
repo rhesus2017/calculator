@@ -1,0 +1,84 @@
+@charset "utf-8";
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+  font-size: 0.625em;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calculator {
+  padding: 60px 15px 15px;
+  width: 386px;
+  border-radius: 10px;
+  border: 1px solid #111;
+}
+
+.calculator > .result {
+  color: #fff;
+  height: 100px;
+  line-height: 80px;
+  font-size: 70px;
+  padding: 0 20px;
+  text-align: right;
+}
+
+.calculator > .buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.calculator > .buttons > .line {
+  display: flex;
+  gap: 12px;
+}
+
+.calculator > .buttons > .line > div {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 75px;
+  font-size: 34px;
+  cursor: pointer;
+}
+
+.calculator > .buttons > .line > .etcButton {
+  color: #000;
+  background: #a5a5a5;
+}
+
+.calculator > .buttons > .line > .operatorButton {
+  color: #fff;
+  background: #f1a43c;
+}
+
+.calculator > .buttons > .line > .numberButton {
+  color: #fff;
+  background: #333;
+}
+
+.calculator > .buttons > .line > .zeroButton {
+  width: 172px;
+  border-radius: 80px;
+}
