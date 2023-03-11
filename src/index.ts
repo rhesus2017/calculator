@@ -64,7 +64,8 @@ const calculation = (): number => {
     .split(" ")
     .map((item) => (isNumber(item) ? Number(item) : item));
 
-  return eval(deleteZero.join(""));
+  let calculationResult = new Function("return " + deleteZero.join(""))();
+  return calculationResult;
 };
 
 const replaceElement = (element: string, target: string = "element") => {
