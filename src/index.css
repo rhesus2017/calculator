@@ -33,13 +33,24 @@ body {
   border: 1px solid #111;
 }
 
-.calculator > .result {
-  color: #fff;
+.calculator > .resultBox {
   height: 100px;
   line-height: 80px;
-  font-size: 70px;
   padding: 0 20px;
+  overflow: hidden;
+}
+
+.calculator > .resultBox > .result {
+  color: #fff;
+  font-size: 70px;
   text-align: right;
+  float: right;
+}
+
+.calculator > .resultBox > .result:after {
+  content: "";
+  display: block;
+  clear: both;
 }
 
 .calculator > .btns {
