@@ -9,9 +9,6 @@ const handleResetClick = () => {
   if (!expressions.length) return;
 
   replaceElement("", "array");
-
-  console.log(result.textContent);
-  console.log(expressions);
 };
 
 const handleCalculationClick = () => {
@@ -19,8 +16,10 @@ const handleCalculationClick = () => {
 
   replaceElement(String(calculation()), "array");
 
-  console.log(expressions);
-  console.log(result.textContent);
+  if (expressions[0] === "Infinity") {
+    replaceElement("", "array");
+    alert("입력하신 내용은 계산할 수 없습니다.");
+  }
 };
 
 const handlePercentClick = () => {
@@ -28,9 +27,6 @@ const handlePercentClick = () => {
   if (!isNumber(last)) onPop();
 
   replaceElement(String(Number(last) / 100));
-
-  console.log(result.textContent);
-  console.log(expressions);
 };
 
 const handleInvertClick = () => {
@@ -38,9 +34,6 @@ const handleInvertClick = () => {
   if (!isNumber(last)) onPop();
 
   replaceElement(String(Number(last) * -1));
-
-  console.log(result.textContent);
-  console.log(expressions);
 };
 
 const handleOperatorClick = (element: string) => {
@@ -61,9 +54,6 @@ const handleOperatorClick = (element: string) => {
       else replaceElement(` ${element} `);
     }
   }
-
-  console.log(expressions);
-  console.log(result.textContent);
 };
 
 const calculation = (): number => {
