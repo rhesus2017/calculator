@@ -1,6 +1,5 @@
 @charset "utf-8";
-
-* {
+Btn * {
   margin: 0;
   padding: 0;
   border: none;
@@ -53,18 +52,18 @@ body {
   clear: both;
 }
 
-.calculator > .btns {
+.calculator > .buttons {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.calculator > .btns > .line {
+.calculator > .buttons > .line {
   display: flex;
   gap: 12px;
 }
 
-.calculator > .btns > .line > .btn {
+.calculator > .buttons > .line > .button {
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -74,22 +73,22 @@ body {
   cursor: pointer;
 }
 
-.calculator > .btns > .line > .etcBtn {
+.calculator > .buttons > .line > .etcButton {
   color: #000;
   background: #a5a5a5;
 }
 
-.calculator > .btns > .line > .operatorBtn {
+.calculator > .buttons > .line > .operatorButton {
   color: #fff;
   background: #f1a43c;
 }
 
-.calculator > .btns > .line > .numberBtn {
+.calculator > .buttons > .line > .numberButton {
   color: #fff;
   background: #333;
 }
 
-.calculator > .btns > .line > .zeroBtn {
+.calculator > .buttons > .line > .zeroButton {
   width: 172px;
   border-radius: 80px;
 }

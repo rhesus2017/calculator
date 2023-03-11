@@ -1,12 +1,14 @@
 import "./index.css";
 
-const buttons = document.getElementsByClassName("btn");
+const buttons = document.getElementsByClassName("button");
 const result = document.querySelector(".result");
 let expressions: string[] = [];
+let last = expressions.at(-1) || "0";
 
 const handleResetClick = () => {
-  result.textContent = "0";
-  expressions = [];
+  if (!expressions.length) return;
+
+  replaceElement("", "array");
 
   console.log(result.textContent);
   console.log(expressions);
@@ -15,62 +17,38 @@ const handleResetClick = () => {
 const handleCalculationClick = () => {
   if (!expressions.length) return;
 
-  result.textContent = expressionCalculation(expressions).toLocaleString(
-    undefined,
-    {
-      minimumFractionDigits: String(expressionCalculation(expressions)).split(
-        "."
-      )[1]?.length,
-    }
-  );
-  expressions = [String(expressionCalculation(expressions))];
+  replaceElement(String(calculation()), "array");
 
   console.log(expressions);
   console.log(result.textContent);
 };
 
 const handlePercentClick = () => {
-  let last = expressions.at(-1) || "0";
+  if (!expressions.length) return;
+  if (!isNumber(last)) onPop();
 
-  if (isNum(last)) {
-    replaceLastIndex(String(Number(last) / 100));
-  } else {
-    expressions.pop();
-    replaceLastIndex(String(Number(expressions.at(-1) || "0") / 100));
-  }
+  replaceElement(String(Number(last) / 100));
 
   console.log(result.textContent);
   console.log(expressions);
 };
 
-const handleOperatorClick = (button: Element) => {
-  let last = expressions.at(-1) || "0";
-
-  if (isNum(button.textContent)) {
-    if ((isNum(last) || last.trim() === ".") && last !== "0") {
-      replaceLastIndex(last.trim() + button.textContent);
+const handleOperatorClick = (element: string) => {
+  if (isNumber(element)) {
+    if (!isOperator(last) && last !== "0") {
+      replaceElement(last.trim() + element);
     } else {
-      if (last.trim() === "-") {
-        replaceLastIndex(last.trim() + button.textContent);
-      } else {
-        pushOperator(button.textContent);
-      }
+      if (last === " - ") replaceElement(last.trim() + element);
+      else addElement(element);
     }
   } else {
-    if (button.textContent === ".") {
-      if (
-        isNum(last) &&
-        !last.includes(".") &&
-        Number.isInteger(Number(last))
-      ) {
-        replaceLastIndex(last + button.textContent.trim());
+    if (element === ".") {
+      if (isNumber(last) && !last.includes(".")) {
+        replaceElement(last + element.trim());
       }
     } else {
-      if (isNum(last)) {
-        pushOperator(` ${button.textContent} `);
-      } else {
-        replaceLastIndex(` ${button.textContent} `);
-      }
+      if (isNumber(last)) addElement(` ${element} `);
+      else replaceElement(` ${element} `);
     }
   }
 
@@ -78,53 +56,74 @@ const handleOperatorClick = (button: Element) => {
   console.log(result.textContent);
 };
 
-const isNum = (str: string) => {
-  if (isNaN(Number(str))) return false;
-  else return true;
-};
-
-const expressionCalculation = (expressions: string[]): number => {
-  let last = expressions.at(-1) || "0";
-  if (!isNum(last)) expressions.pop();
+const calculation = (): number => {
+  if (!isNumber(last)) onPop();
 
   let deleteZero = expressions
     .join("")
     .split(" ")
-    .map((item) => (isNum(item) ? Number(item) : item));
+    .map((item) => (isNumber(item) ? Number(item) : item));
 
   return eval(deleteZero.join(""));
 };
 
-const replaceLastIndex = (str: string) => {
-  if (isNum(str) || str.trim() === ".") {
-    result.textContent = Number(str).toLocaleString(undefined, {
-      minimumFractionDigits: str.split(".")[1]?.length,
-    });
-  }
+const replaceElement = (element: string, target: string = "element") => {
+  if (!isOperator(element)) result.textContent = addComma(element);
 
-  expressions.pop();
-  expressions.push(str);
+  if (target === "element") {
+    onPop();
+    onPush(element);
+  } else if (target === "array") onReplace(element);
 };
 
-const pushOperator = (str: string) => {
-  if (isNum(str) || str.trim() === ".") {
-    result.textContent = Number(str).toLocaleString(undefined, {
-      minimumFractionDigits: str.split(".")[1]?.length,
-    });
-  }
+const addElement = (element: string) => {
+  if (!isOperator(element)) result.textContent = addComma(element);
 
-  expressions.push(str);
+  onPush(element);
+};
+
+const onReplace = (element: string) => {
+  expressions = element.length ? [element] : [];
+  last = expressions.at(-1) || "0";
+};
+
+const onPush = (element: string) => {
+  expressions.push(element);
+  last = expressions.at(-1) || "0";
+};
+
+const onPop = () => {
+  expressions.pop();
+  last = expressions.at(-1) || "0";
+};
+
+const addComma = (result: string) => {
+  return Number(result).toLocaleString(undefined, {
+    minimumFractionDigits: result.split(".")[1]?.length,
+  });
+};
+
+const isOperator = (element: string) => {
+  return !isNumber(element) && element !== " . ";
+};
+
+const isNumber = (element: string) => {
+  if (isNaN(Number(element))) return false;
+  else return true;
 };
 
 for (let i = 0; i < buttons.length; i++) {
   if (buttons[i].textContent === "C") {
     buttons[i].addEventListener("click", handleResetClick);
   } else if (buttons[i].textContent === "+/-") {
+    buttons[i].addEventListener("click", handlePercentClick);
   } else if (buttons[i].textContent === "%") {
     buttons[i].addEventListener("click", handlePercentClick);
   } else if (buttons[i].textContent === "=") {
     buttons[i].addEventListener("click", handleCalculationClick);
   } else {
-    buttons[i].addEventListener("click", () => handleOperatorClick(buttons[i]));
+    buttons[i].addEventListener("click", () =>
+      handleOperatorClick(buttons[i].textContent)
+    );
   }
 }
