@@ -33,6 +33,16 @@ const handlePercentClick = () => {
   console.log(expressions);
 };
 
+const handleInvertClick = () => {
+  if (!expressions.length) return;
+  if (!isNumber(last)) onPop();
+
+  replaceElement(String(Number(last) * -1));
+
+  console.log(result.textContent);
+  console.log(expressions);
+};
+
 const handleOperatorClick = (element: string) => {
   if (isNumber(element)) {
     if (!isOperator(last) && last !== "0") {
@@ -116,7 +126,7 @@ for (let i = 0; i < buttons.length; i++) {
   if (buttons[i].textContent === "C") {
     buttons[i].addEventListener("click", handleResetClick);
   } else if (buttons[i].textContent === "+/-") {
-    buttons[i].addEventListener("click", handlePercentClick);
+    buttons[i].addEventListener("click", handleInvertClick);
   } else if (buttons[i].textContent === "%") {
     buttons[i].addEventListener("click", handlePercentClick);
   } else if (buttons[i].textContent === "=") {
