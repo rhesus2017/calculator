@@ -26,20 +26,30 @@ const handleOperatorClick = (button: Element) => {
   let last = expressions.at(-1) || "0";
 
   if (isNum(button.textContent)) {
-    if ((isNum(last) || last === " . ") && last !== "0") {
+    if ((isNum(last) || last.trim() === ".") && last !== "0") {
       replaceLastIndex(last.trim() + button.textContent);
     } else {
-      pushOperator(button.textContent);
+      if (last.trim() === "-") {
+        replaceLastIndex(last.trim() + button.textContent);
+      } else {
+        pushOperator(button.textContent);
+      }
     }
   } else {
     if (button.textContent === ".") {
-      if (isNum(last)) {
+      if (
+        isNum(last) &&
+        last.at(-1) !== "." &&
+        Number.isInteger(Number(last))
+      ) {
         replaceLastIndex(last + button.textContent.trim());
-      } else {
-        pushOperator(` ${button.textContent} `);
       }
     } else {
-      expressions.push(` ${button.textContent} `);
+      if (isNum(last)) {
+        pushOperator(` ${button.textContent} `);
+      } else {
+        replaceLastIndex(` ${button.textContent} `);
+      }
     }
   }
 
@@ -65,13 +75,13 @@ const expressionCalculation = (expressions: string[]) => {
 };
 
 const replaceLastIndex = (str: string) => {
-  result.textContent = str;
+  if (isNum(str) || str.trim() === ".") result.textContent = str;
   expressions.pop();
   expressions.push(str);
 };
 
 const pushOperator = (str: string) => {
-  result.textContent = str;
+  if (isNum(str) || str.trim() === ".") result.textContent = str;
   expressions.push(str);
 };
 
