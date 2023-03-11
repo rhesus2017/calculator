@@ -16,7 +16,7 @@ const handleCalculationClick = () => {
 
   replaceElement(String(calculation()), "array");
 
-  if (expressions[0] === "Infinity") {
+  if (expressions[0].includes("Infinity")) {
     replaceElement("", "array");
     alert("입력하신 내용은 계산할 수 없습니다.");
   }
