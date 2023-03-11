@@ -14,13 +14,65 @@ const handleResetClick = () => {
 
 const handleCalculationClick = () => {
   if (!expressions.length) return;
+
+  result.textContent = String(expressionCalculation(expressions));
+  expressions = [String(expressionCalculation(expressions))];
+
+  console.log(expressions);
+  console.log(result.textContent);
 };
 
-const handleOperatorClick = (button: Element) => {};
+const handleOperatorClick = (button: Element) => {
+  let last = expressions.at(-1) || "0";
+
+  if (isNum(button.textContent)) {
+    if ((isNum(last) || last === " . ") && last !== "0") {
+      replaceLastIndex(last.trim() + button.textContent);
+    } else {
+      pushOperator(button.textContent);
+    }
+  } else {
+    if (button.textContent === ".") {
+      if (isNum(last)) {
+        replaceLastIndex(last + button.textContent.trim());
+      } else {
+        pushOperator(` ${button.textContent} `);
+      }
+    } else {
+      expressions.push(` ${button.textContent} `);
+    }
+  }
+
+  console.log(expressions);
+  console.log(result.textContent);
+};
 
 const isNum = (str: string) => {
   if (isNaN(Number(str))) return false;
   else return true;
+};
+
+const expressionCalculation = (expressions: string[]) => {
+  let last = expressions.at(-1) || "0";
+  if (!isNum(last)) expressions.pop();
+
+  let deleteZero = expressions
+    .join("")
+    .split(" ")
+    .map((item) => (isNum(item) ? Number(item) : item));
+
+  return eval(deleteZero.join(""));
+};
+
+const replaceLastIndex = (str: string) => {
+  result.textContent = str;
+  expressions.pop();
+  expressions.push(str);
+};
+
+const pushOperator = (str: string) => {
+  result.textContent = str;
+  expressions.push(str);
 };
 
 for (let i = 0; i < buttons.length; i++) {
