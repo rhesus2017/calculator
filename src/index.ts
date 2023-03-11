@@ -15,7 +15,14 @@ const handleResetClick = () => {
 const handleCalculationClick = () => {
   if (!expressions.length) return;
 
-  result.textContent = String(expressionCalculation(expressions));
+  result.textContent = expressionCalculation(expressions).toLocaleString(
+    undefined,
+    {
+      minimumFractionDigits: String(expressionCalculation(expressions)).split(
+        "."
+      )[1]?.length,
+    }
+  );
   expressions = [String(expressionCalculation(expressions))];
 
   console.log(expressions);
@@ -62,7 +69,7 @@ const isNum = (str: string) => {
   else return true;
 };
 
-const expressionCalculation = (expressions: string[]) => {
+const expressionCalculation = (expressions: string[]): number => {
   let last = expressions.at(-1) || "0";
   if (!isNum(last)) expressions.pop();
 
@@ -75,13 +82,24 @@ const expressionCalculation = (expressions: string[]) => {
 };
 
 const replaceLastIndex = (str: string) => {
-  if (isNum(str) || str.trim() === ".") result.textContent = str;
+  console.log(str);
+  if (isNum(str) || str.trim() === ".") {
+    result.textContent = Number(str).toLocaleString(undefined, {
+      minimumFractionDigits: str.split(".")[1]?.length,
+    });
+  }
+
   expressions.pop();
   expressions.push(str);
 };
 
 const pushOperator = (str: string) => {
-  if (isNum(str) || str.trim() === ".") result.textContent = str;
+  if (isNum(str) || str.trim() === ".") {
+    result.textContent = Number(str).toLocaleString(undefined, {
+      minimumFractionDigits: str.split(".")[1]?.length,
+    });
+  }
+
   expressions.push(str);
 };
 
